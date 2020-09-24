@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookinfo-ratings
+  labels:
+    app: bookinfo-dev-ratings
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookinfo-dev-ratings
+  template:
+    metadata:
+      labels:
+        app: bookinfo-dev-ratings
+    spec:
+      imagePullSecrets:
+      - name: registry
+      containers:
+      - name: bookinfo-dev-ratings
+        image: registry.demo.opsta.co.th/bookinfo/ratings:develop
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        ports:
+        - containerPort: 8080
+          name: web-port
+          protocol: TCP
+        env:
+        - name: SERVICE_VERSION
+          value: v1
